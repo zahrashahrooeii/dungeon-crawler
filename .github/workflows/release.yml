@@ -21,28 +21,6 @@ jobs:
     - name: Run tests before release
       run: php run_tests.php
     
-    - name: Create release archive
-      run: |
-        # Create a clean release archive
-        mkdir -p release
-        cp dungeon_crawler.php release/
-        cp README.md release/
-        cp run_tests.php release/
-        cp -r tests release/
-        
-        # Create zip file
-        cd release
-        zip -r ../dungeon-crawler-${{ github.ref_name }}.zip .
-        cd ..
-        
-        echo "Release archive created: dungeon-crawler-${{ github.ref_name }}.zip"
-    
-    - name: Upload release asset
-      uses: actions/upload-artifact@v4
-      with:
-        name: dungeon-crawler-${{ github.ref_name }}
-        path: dungeon-crawler-${{ github.ref_name }}.zip
-    
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
@@ -59,11 +37,13 @@ jobs:
           - Treasure collection and exploration
           - Comprehensive unit test suite (21 test cases)
           - Clean, maintainable code structure
+          - GitHub Actions CI/CD pipeline
           
           ### Installation
-          1. Extract the zip file
-          2. Ensure PHP 7.0+ is installed
-          3. Run: `php dungeon_crawler.php`
+          1. Clone this repository: `git clone https://github.com/zahrashahrooeii/dungeon-crawler.git`
+          2. Navigate to the directory: `cd dungeon-crawler`
+          3. Ensure PHP 7.0+ is installed
+          4. Run: `php dungeon_crawler.php`
           
           ### Testing
           Run: `php run_tests.php`
@@ -73,7 +53,7 @@ jobs:
           ✅ Optional enhancements included
           ✅ Clean code structure with separation of concerns
           ✅ Comprehensive testing
-        files: dungeon-crawler-${{ github.ref_name }}.zip
+          ✅ CI/CD pipeline with automated testing
         draft: false
         prerelease: false
       env:
