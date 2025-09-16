@@ -70,6 +70,11 @@ php tests/MovementTest.php
 - `attack` or `a` - Attack a monster in the current room
 - `status` - Display your current health, attack, and treasure
 - `map` - Show the dungeon map with your progress
+- `save` - Save game to slot 1
+- `save1`, `save2`, `save3` - Save game to specific slot
+- `load` - Load game from slot 1
+- `load1`, `load2`, `load3` - Load game from specific slot
+- `saves` - List all available save files
 - `quit` or `q` - Exit the game
 
 ### Gameplay
@@ -84,6 +89,12 @@ php tests/MovementTest.php
 - You attack first, then the monster attacks
 - You cannot leave a room while a monster is present
 - Defeating monsters gives you gold rewards
+
+### Save/Load System
+- **Save your progress**: Use `save` to save to slot 1, or `save1`, `save2`, `save3` for specific slots
+- **Load your game**: Use `load` to load from slot 1, or `load1`, `load2`, `load3` for specific slots
+- **List saves**: Use `saves` to see all available save files with details
+- **Save files**: Stored as JSON files in the game directory
 
 ### Winning/Losing
 - **Win**: Reach the exit room without any monsters
@@ -165,4 +176,5 @@ This project includes a comprehensive CI/CD pipeline using GitHub Actions:
 ✅ **Maintainable code** - Simple, readable functions  
 ✅ **Thoughtful state handling** - Proper game state management  
 ✅ **Simplicity** - No over-engineering, clean implementation  
+✅ **Save/load functionality** - JSON-based save system with multiple slots  
 

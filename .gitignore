@@ -44,6 +44,9 @@ dist/
 *.zip
 *.tar.gz
 
+# Save files
+save_slot_*.json
+
 # Node modules (if you add any frontend tools later)
 node_modules/
 npm-debug.log*

@@ -303,7 +303,7 @@ function displayPlayerStatus($gameState) {
  * Get user input
  */
 function getUserInput() {
-    echo "\nWhat do you want to do? (north/south/east/west/attack/status/map/quit): ";
+    echo "\nWhat do you want to do? (north/south/east/west/attack/status/map/save/load/saves/quit): ";
     return trim(fgets(STDIN));
 }
 
@@ -335,13 +335,114 @@ function processCommand($command, $gameState) {
         case 'map':
             echo "\n" . getDungeonMap($gameState) . "\n";
             return ['success' => true, 'message' => '', 'gameState' => $gameState];
+        case 'save':
+            saveGame($gameState, 1);
+            return ['success' => true, 'message' => '', 'gameState' => $gameState];
+        case 'save1':
+        case 'save2':
+        case 'save3':
+            $slot = (int)substr($command, 4);
+            saveGame($gameState, $slot);
+            return ['success' => true, 'message' => '', 'gameState' => $gameState];
+        case 'load':
+            $loadedState = loadGame(1);
+            if ($loadedState !== null) {
+                return ['success' => true, 'message' => '', 'gameState' => $loadedState];
+            }
+            return ['success' => true, 'message' => '', 'gameState' => $gameState];
+        case 'load1':
+        case 'load2':
+        case 'load3':
+            $slot = (int)substr($command, 4);
+            $loadedState = loadGame($slot);
+            if ($loadedState !== null) {
+                return ['success' => true, 'message' => '', 'gameState' => $loadedState];
+            }
+            return ['success' => true, 'message' => '', 'gameState' => $gameState];
+        case 'saves':
+            listSaveFiles();
+            return ['success' => true, 'message' => '', 'gameState' => $gameState];
         case 'quit':
         case 'q':
             $gameState['game_over'] = true;
             return ['success' => true, 'message' => 'Thanks for playing!', 'gameState' => $gameState];
         default:
-            return ['success' => false, 'message' => 'Invalid command. Try: north, south, east, west, attack, status, map, or quit.'];
+            return ['success' => false, 'message' => 'Invalid command. Try: north, south, east, west, attack, status, map, save, load, saves, or quit.'];
     }
+}
+
+/**
+ * Save game to file
+ */
+function saveGame($gameState, $slot = 1) {
+    $filename = "save_slot_{$slot}.json";
+    $saveData = json_encode($gameState, JSON_PRETTY_PRINT);
+    
+    if (file_put_contents($filename, $saveData) === false) {
+        echo "Error: Could not save game to slot {$slot}!\n";
+        return false;
+    }
+    
+    echo "Game saved successfully to slot {$slot}!\n";
+    return true;
+}
+
+/**
+ * Load game from file
+ */
+function loadGame($slot = 1) {
+    $filename = "save_slot_{$slot}.json";
+    
+    if (!file_exists($filename)) {
+        echo "No save file found in slot {$slot}!\n";
+        return null;
+    }
+    
+    $saveData = file_get_contents($filename);
+    if ($saveData === false) {
+        echo "Error: Could not read save file from slot {$slot}!\n";
+        return null;
+    }
+    
+    $gameState = json_decode($saveData, true);
+    if ($gameState === null) {
+        echo "Error: Save file in slot {$slot} is corrupted!\n";
+        return null;
+    }
+    
+    echo "Game loaded successfully from slot {$slot}!\n";
+    return $gameState;
+}
+
+/**
+ * List available save files
+ */
+function listSaveFiles() {
+    echo "\n=== SAVE FILES ===\n";
+    $found = false;
+    
+    for ($i = 1; $i <= 3; $i++) {
+        $filename = "save_slot_{$i}.json";
+        if (file_exists($filename)) {
+            $saveData = file_get_contents($filename);
+            $gameState = json_decode($saveData, true);
+            
+            if ($gameState !== null) {
+                $player = $gameState['player'];
+                $room = $gameState['rooms'][$player['current_room']];
+                $modified = date('Y-m-d H:i:s', filemtime($filename));
+                
+                echo "Slot {$i}: {$room['name']} - Health: {$player['health']}/{$player['max_health']}, Treasure: {$player['treasure']} gold\n";
+                echo "         Saved: {$modified}\n";
+                $found = true;
+            }
+        }
+    }
+    
+    if (!$found) {
+        echo "No save files found.\n";
+    }
+    echo "==================\n";
 }
 
 /**
