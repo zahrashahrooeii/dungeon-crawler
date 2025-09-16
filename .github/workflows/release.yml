@@ -1,0 +1,79 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 8.2
+    
+    - name: Run tests before release
+      run: php run_tests.php
+    
+    - name: Create release archive
+      run: |
+        # Create a clean release archive
+        mkdir -p release
+        cp dungeon_crawler.php release/
+        cp README.md release/
+        cp run_tests.php release/
+        cp -r tests release/
+        
+        # Create zip file
+        cd release
+        zip -r ../dungeon-crawler-${{ github.ref_name }}.zip .
+        cd ..
+        
+        echo "Release archive created: dungeon-crawler-${{ github.ref_name }}.zip"
+    
+    - name: Upload release asset
+      uses: actions/upload-artifact@v3
+      with:
+        name: dungeon-crawler-${{ github.ref_name }}
+        path: dungeon-crawler-${{ github.ref_name }}.zip
+    
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Dungeon Crawler ${{ github.ref_name }}
+        body: |
+          ## Dungeon Crawler Game
+          
+          A text-based dungeon crawler game written in PHP for the Bundeling interview assignment.
+          
+          ### Features
+          - Turn-based gameplay with 12 interconnected rooms
+          - Combat system with 5 different monster types
+          - Treasure collection and exploration
+          - Comprehensive unit test suite (21 test cases)
+          - Clean, maintainable code structure
+          
+          ### Installation
+          1. Extract the zip file
+          2. Ensure PHP 7.0+ is installed
+          3. Run: `php dungeon_crawler.php`
+          
+          ### Testing
+          Run: `php run_tests.php`
+          
+          ### Requirements Met
+          ✅ All core requirements implemented
+          ✅ Optional enhancements included
+          ✅ Clean code structure with separation of concerns
+          ✅ Comprehensive testing
+        draft: false
+        prerelease: false

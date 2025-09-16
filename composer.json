@@ -1,0 +1,43 @@
+{
+    "name": "zahrashahrooeii/dungeon-crawler",
+    "description": "A text-based dungeon crawler game written in PHP for the Bundeling interview assignment",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Zahra Shahrooei",
+            "email": "zahra.shahrooei@example.com",
+            "homepage": "https://github.com/zahrashahrooeii"
+        }
+    ],
+    "keywords": [
+        "php",
+        "game",
+        "dungeon-crawler",
+        "cli",
+        "text-based",
+        "interview-assignment"
+    ],
+    "require": {
+        "php": ">=7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "files": [
+            "dungeon_crawler.php"
+        ]
+    },
+    "scripts": {
+        "test": "php run_tests.php",
+        "play": "php dungeon_crawler.php",
+        "validate": "php -l dungeon_crawler.php"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
