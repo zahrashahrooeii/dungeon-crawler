@@ -1,12 +1,12 @@
 {
     "name": "zahrashahrooeii/dungeon-crawler",
-    "description": "A text-based dungeon crawler game written in PHP for the Bundeling interview assignment",
+    "description": "A text-based dungeon crawler game written in PHP ",
     "type": "project",
     "license": "MIT",
     "authors": [
         {
             "name": "Zahra Shahrooei",
-            "email": "zahra.shahrooei@example.com",
+            "email": "zahra.shahrooeii@gmail.com",
             "homepage": "https://github.com/zahrashahrooeii"
         }
     ],
@@ -16,7 +16,7 @@
         "dungeon-crawler",
         "cli",
         "text-based",
-        "interview-assignment"
+        "bundeling"
     ],
     "require": {
         "php": ">=7.0"
